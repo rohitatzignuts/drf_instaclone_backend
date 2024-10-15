@@ -3,7 +3,7 @@ from rest_framework import status, views
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
-from .serializers import UserRegistrationSerializer
+from .serializers import UserRegistrationSerializer, UserSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
@@ -50,16 +50,6 @@ class UserDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        # The user is available through `request.user` after token authentication
         user = request.user
-
-        # Return user data (you can adjust this based on your needs)
-        return Response(
-            {
-                "id": user.id,
-                "username": user.username,
-                "email": user.email,
-                "first_name": user.first_name,
-                "last_name": user.last_name,
-            }
-        )
+        serializer = UserSerializer(user, context={"request": request})
+        return Response(serializer.data)

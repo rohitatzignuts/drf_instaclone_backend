@@ -19,6 +19,16 @@ class PostListView(generics.ListAPIView):
         return Post.objects.filter(user=self.request.user).order_by("-created_at")
 
 
+class AllPostView(generics.ListAPIView):
+    serializer_class = PostSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """Show all the posts."""
+        return Post.objects.all().order_by("-created_at")
+
+
 class PostCreateView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
