@@ -2,12 +2,14 @@
 from rest_framework import status, views
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from .serializers import UserRegistrationSerializer, UserSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
+
+User = get_user_model()
 
 
 class UserRegistrationView(APIView):
@@ -53,3 +55,35 @@ class UserDetailView(APIView):
         user = request.user
         serializer = UserSerializer(user, context={"request": request})
         return Response(serializer.data)
+
+
+class UserEditView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        user = request.user
+
+        # Get the incoming data
+        profile_pic = request.FILES.get("profile_pic")
+        username = request.data.get("username")
+        first_name = request.data.get("first_name")
+        last_name = request.data.get("last_name")
+
+        # Update the user fields
+        if username:
+            user.username = username
+        if first_name:
+            user.first_name = first_name
+        if last_name:
+            user.last_name = last_name
+        if profile_pic:
+            user.profile_pic = profile_pic
+
+        # Save the updated user instance
+        user.save()
+
+        return Response(
+            {"message": "Profile updated successfully!"},
+            status=status.HTTP_200_OK,
+        )

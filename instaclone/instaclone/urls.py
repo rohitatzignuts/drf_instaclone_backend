@@ -17,7 +17,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from .views import UserRegistrationView, CustomLogoutView, UserDetailView
+from .views import UserRegistrationView, CustomLogoutView, UserDetailView, UserEditView
 from rest_framework.authtoken.views import obtain_auth_token
 from social import urls
 from django.conf import settings
@@ -26,6 +26,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/user/", UserDetailView.as_view()),
+    path("api/user/edit/", UserEditView.as_view()),
     # path("api-auth/", include("rest_framework.urls")),
     path("api/register/", UserRegistrationView.as_view(), name="user-registration"),
     path("api/login/", obtain_auth_token, name="user-login"),
