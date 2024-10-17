@@ -56,9 +56,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "instaclone.urls"
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-]
+CORS_ALLOWED_ORIGINS = ["http://localhost:5173", "https://e76041aa8f8414.lhr.life"]
 CSRF_COOKIE_HTTPONLY = False  # Allow JavaScript access to the CSRF cookie
 CSRF_USE_SESSIONS = False  # Default to cookies for CSRF token handling
 CORS_ALLOW_CREDENTIALS = True
